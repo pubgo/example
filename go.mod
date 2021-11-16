@@ -55,6 +55,7 @@ require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
 	github.com/RoaringBitmap/roaring v0.9.4 // indirect
+	github.com/RyouZhang/go-lua v0.4.1
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/alecthomas/chroma v0.8.2 // indirect
 	github.com/andybalholm/brotli v1.0.2 // indirect
