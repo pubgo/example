@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"time"
+
+	"github.com/dop251/goja"
 )
-import "github.com/dop251/goja"
 
 func main() {
 	var now = time.Now()
