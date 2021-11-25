@@ -14,6 +14,10 @@ import (
 	"github.com/pubgo/xerror"
 )
 
+const (
+	Annotations = "google/api/annotations.proto"
+)
+
 func main() {
 	md, err := desc.LoadMessageDescriptorForMessage((*empty.Empty)(nil))
 	xerror.Exit(err)
@@ -49,6 +53,9 @@ func main() {
 package hello;
 syntax = "proto3";
 import "google/protobuf/descriptor.proto";
+
+option go_package = "./;user_pb";
+
 message Test {}
 message Foo {
   repeated Bar bar = 1;
@@ -75,6 +82,11 @@ service TestService {
 
   rpc Hello1 (Test) returns (Test) {}
   rpc Get (Test) returns (Test) {
+ option (google.api.http) = {
+    post: "/hello/TestService/Get"
+    body: "*"
+  };
+
     option (foo).bar = { baz:FROB name:"abc" };
     option (foo).bar = { baz:NITZ name:"xyz" };
   }
@@ -108,6 +120,10 @@ service TestService {
 		var replacer = strings.NewReplacer(".", "/", "-", "/")
 		pkg = replacer.Replace(p.Name)
 	}))
+	
+	ep.WithOption(func(option *ep.Option) {
+		fmt.Println(option.Name)
+	})
 
 	fmt.Println(pkg)
 	var rpcs []*ep.RPC
@@ -124,6 +140,7 @@ service TestService {
 
 	var dataLine = strings.Split(data, "\n")
 
+	var mod bool
 	for i := range rpcs {
 		rpc := rpcs[i]
 		insert := fmt.Sprintf(`
@@ -142,6 +159,7 @@ rpc %s (%s) returns (%s) {
 
 		// 如果option为0, 那么可以整体替换, 通过正则表达式
 		if len(rpc.Options) == 0 || !hasHttp {
+			mod = true
 			_ = insert
 			var rpcData = strings.Trim(dataLine[rpc.Position.Line-1], ";")
 			// 以}结尾
@@ -156,6 +174,17 @@ rpc %s (%s) returns (%s) {
 			//	fmt.Println("has=>", data[rpc.Position.Offset:rpc.Options[0].Position.Offset])
 		}
 	}
+
+	if mod {
+		var imports = make(map[string]struct{})
+		ep.Walk(definition, ep.WithImport(func(i *ep.Import) {
+			imports[i.Filename] = struct{}{}
+		}))
+		if _, ok := imports[Annotations]; !ok {
+			dataLine = append([]string{fmt.Sprintf(`import "%s"`, Annotations)}, dataLine...)
+		}
+	}
+
 	data = strings.Join(dataLine, "\n")
 	fmt.Println(data)
 }
