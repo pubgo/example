@@ -110,8 +110,8 @@ service TestService {
 	}))
 
 	fmt.Println(pkg)
+	var rpcs []*ep.RPC
 	ep.Walk(definition, ep.WithService(func(srv *ep.Service) {
-		var rpcs []*ep.RPC
 		for _, e := range srv.Elements {
 			var rpc, ok = e.(*ep.RPC)
 			if !ok {
@@ -120,23 +120,42 @@ service TestService {
 
 			rpcs = append(rpcs, rpc)
 		}
+	}))
 
-		for i := range rpcs {
-			rpc := rpcs[i]
-			insert := fmt.Sprintf(`rpc %s (%s) returns (%s) {
-        option (google.api.http) = {
-          post: "/%s/%s/%s"
-          body: "*"
-        };
-    }`, rpc.Name, rpc.RequestType, rpc.ReturnsType, pkg, rpc.Parent.(*ep.Service).Name, rpc.Name)
-			// 如果option为0, 那么可以整体替换, 通过正则表达式
-			if len(rpc.Options) == 0 {
-				_ = insert
-				fmt.Println("line=>",strings.Split(data, "\n")[rpc.Position.Line-1])
-				fmt.Println("no=>", data[rpc.Position.Offset:rpc.Position.Offset+50])
-			} else {
-				fmt.Println("has=>", data[rpc.Position.Offset:rpc.Options[0].Position.Offset])
+	var dataLine = strings.Split(data, "\n")
+
+	for i := range rpcs {
+		rpc := rpcs[i]
+		insert := fmt.Sprintf(`
+rpc %s (%s) returns (%s) {
+  option (google.api.http) = {
+    post: "/%s/%s/%s"
+    body: "*"
+  };`, rpc.Name, rpc.RequestType, rpc.ReturnsType, pkg, rpc.Parent.(*ep.Service).Name, rpc.Name)
+
+		var hasHttp bool
+		for i := range rpc.Options {
+			if rpc.Options[i].Name == "(google.api.http)" {
+				hasHttp = true
 			}
 		}
-	}))
+
+		// 如果option为0, 那么可以整体替换, 通过正则表达式
+		if len(rpc.Options) == 0 || !hasHttp {
+			_ = insert
+			var rpcData = strings.Trim(dataLine[rpc.Position.Line-1], ";")
+			// 以}结尾
+			if rpcData[len(rpcData)-1] == '}' {
+				dataLine[rpc.Position.Line-1] = insert + "\n}\n"
+			} else {
+				dataLine[rpc.Position.Line-1] = insert
+			}
+			//fmt.Println("line=>", strings.Split(data, "\n")[rpc.Position.Line-1])
+			//fmt.Println("no=>", data[rpc.Position.Offset:rpc.Position.Offset+50])
+			//} else {
+			//	fmt.Println("has=>", data[rpc.Position.Offset:rpc.Options[0].Position.Offset])
+		}
+	}
+	data = strings.Join(dataLine, "\n")
+	fmt.Println(data)
 }
