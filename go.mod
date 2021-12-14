@@ -38,10 +38,16 @@ require (
 	github.com/tidwall/btree v0.6.1
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/webview/webview v0.0.0-20210330151455-f540d88dde4e
+	go.opentelemetry.io/otel v1.2.0
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.2.0
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.2.0
+	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.2.0
+	go.opentelemetry.io/otel/sdk v1.2.0
+	go.opentelemetry.io/otel/trace v1.2.0
 	go.uber.org/zap v1.19.0
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced
-	google.golang.org/grpc v1.41.0
+	google.golang.org/grpc v1.42.0
 	google.golang.org/protobuf v1.27.1
 	gorm.io/gorm v1.22.2
 )
@@ -93,8 +99,8 @@ require (
 	github.com/chriswalz/bit v1.1.2 // indirect
 	github.com/chriswalz/complete/v3 v3.0.13 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
-	github.com/cncf/udpa/go v0.0.0-20201120205902-5459f2c99403 // indirect
-	github.com/cncf/xds/go v0.0.0-20210805033703-aa0b78936158 // indirect
+	github.com/cncf/udpa/go v0.0.0-20210930031921-04548b0d99d4 // indirect
+	github.com/cncf/xds/go v0.0.0-20211011173535-cb28da3451f1 // indirect
 	github.com/containerd/console v1.0.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964 // indirect
@@ -299,4 +305,13 @@ require (
 	software.sslmate.com/src/go-pkcs12 v0.0.0-20180114231543-2291e8f0f237 // indirect
 	xorm.io/builder v0.3.7 // indirect
 	xorm.io/xorm v1.0.5 // indirect
+)
+
+require (
+	github.com/cenkalti/backoff/v4 v4.1.1 // indirect
+	github.com/golang/snappy v0.0.4 // indirect
+	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	go.opentelemetry.io/proto/otlp v0.10.0 // indirect
 )
