@@ -1,0 +1,8 @@
+watcher:
+  driver: "etcd"
+  name: "default"
+  projects:
+    - "hello"
+    - "hello1"
+  exclude:
+    - "hello"
