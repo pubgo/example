@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pubgo/lava/internal/example/services/entry/grpc_entry/handler"
-	hello2 "github.com/pubgo/lava/internal/example/services/protopb/proto/hello"
+	"github.com/pubgo/example/services/entry/grpc_entry/handler"
+	"github.com/pubgo/example/services/protopb/proto/hello"
 	"net/http"
 	"net/url"
 	"time"
@@ -59,8 +59,8 @@ func init() {
 
 func main() {
 	grpcServer := grpc.NewServer()
-	hello2.RegisterTestApiServer(grpcServer, handler.NewTestAPIHandler())
-	hello2.RegisterTransportServer(grpcServer, &trans{})
+	hello.RegisterTestApiServer(grpcServer, handler.NewTestAPIHandler())
+	hello.RegisterTransportServer(grpcServer, &trans{})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(r.RequestURI)
@@ -78,6 +78,7 @@ func main() {
 		//q.Q(mm)
 
 		grpcServer.ServeHTTP(newGrpcWebResponse(w), req2GrpcRequest(r))
+		//grpcServer.ServeHTTP(handleGRPCResponse(w), req2GrpcRequest(r))
 
 		return
 	})
@@ -85,21 +86,21 @@ func main() {
 	http.ListenAndServe("127.0.0.1:8900", nil)
 }
 
-var _ hello2.TransportServer = (*trans)(nil)
+var _ hello.TransportServer = (*trans)(nil)
 
 type trans struct {
 }
 
-func (t *trans) TestStream(server hello2.Transport_TestStreamServer) error {
+func (t *trans) TestStream(server hello.Transport_TestStreamServer) error {
 	return nil
 }
 
-func (t *trans) TestStream1(server hello2.Transport_TestStream1Server) error {
+func (t *trans) TestStream1(server hello.Transport_TestStream1Server) error {
 	_, _ = server.Recv()
 	return server.SendAndClose(nil)
 }
 
-func (t *trans) TestStream2(message *hello2.Message, server hello2.Transport_TestStream2Server) error {
+func (t *trans) TestStream2(message *hello.Message, server hello.Transport_TestStream2Server) error {
 	message.Header["check"] = "ok"
 	message.Header["ctx"] = fmt.Sprintf("%#v", server.Context())
 
@@ -116,7 +117,7 @@ func (t *trans) TestStream2(message *hello2.Message, server hello2.Transport_Tes
 	return nil
 }
 
-func (t *trans) TestStream3(ctx context.Context, message *hello2.Message) (*hello2.Message, error) {
+func (t *trans) TestStream3(ctx context.Context, message *hello.Message) (*hello.Message, error) {
 	message.Header["check"] = "ok"
 	message.Header["ctx"] = fmt.Sprintf("%#v", ctx)
 	q.Q(ctx)

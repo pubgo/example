@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/pubgo/example/services/protopb/proto/hello"
 	"time"
 
 	"github.com/pubgo/x/q"
@@ -16,7 +17,6 @@ import (
 	"github.com/pubgo/lava/clients/orm"
 	_ "github.com/pubgo/lava/clients/orm/driver/sqlite"
 	"github.com/pubgo/lava/config"
-	"github.com/pubgo/lava/internal/example/services/protopb/proto/hello"
 	"github.com/pubgo/lava/logger"
 	"github.com/pubgo/lava/middlewares/logRecord"
 	"github.com/pubgo/lava/middlewares/requestID"

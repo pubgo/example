@@ -1,9 +1,9 @@
 package gin_entry
 
 import (
+	"github.com/pubgo/example/services/entry/gin_entry/handler"
 	"github.com/pubgo/lava/entry"
 	"github.com/pubgo/lava/entry/ginEntry"
-	"github.com/pubgo/lava/internal/example/services/entry/gin_entry/handler"
 )
 
 func GetEntry() entry.Entry {

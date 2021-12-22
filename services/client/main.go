@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/pubgo/example/services/protopb/proto/hello"
 	"net/http"
 	"time"
 	_ "unsafe"
@@ -13,7 +14,6 @@ import (
 
 	"github.com/pubgo/lava/clients/grpcc"
 	"github.com/pubgo/lava/config"
-	"github.com/pubgo/lava/internal/example/services/protopb/proto/hello"
 	"github.com/pubgo/lava/plugin"
 	"github.com/pubgo/lava/plugins/registry"
 	_ "github.com/pubgo/lava/plugins/tracing/jaeger"

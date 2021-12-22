@@ -46,9 +46,40 @@ func req2GrpcRequest(req *http.Request) *http.Request {
 	// DATA frame payload lengths. https://http2.github.io/http2-spec/#malformed This effectively
 	// switches to chunked encoding which is the default for h2
 	req.Header.Del("content-length")
+	req.Header.Del("Content-Length")
 
 	return req
 }
+
+const (
+	headerContentLength  = "Content-Length"
+	headerGRPCMessage    = "Grpc-Message"
+	headerGRPCStatusCode = "Grpc-Status"
+	headerUseInsecure    = "Grpc-Insecure"
+)
+
+//func handleGRPCResponse(resp http.ResponseWriter) http.ResponseWriter {
+//	code := resp.Header().Get(headerGRPCStatusCode)
+//	if code != "0" && code != "" {
+//		buff := bytes.NewBuffer(nil)
+//		grpcMessage := resp.Header().Get(headerGRPCMessage)
+//		j, _ := json.Marshal(grpcMessage)
+//		buff.WriteString(`{"error":` + string(j) + ` ,"code":` + code + `}`)
+//
+//		resp.Body = ioutil.NopCloser(buff)
+//		resp.StatusCode = 500
+//
+//		return resp
+//	}
+//
+//	prefix := make([]byte, 5)
+//	_, _ = resp.Body.Read(prefix)
+//
+//	resp.Header.Del(headerContentLength)
+//
+//	return resp
+//
+//}
 
 // grpcWebResponse implements http.ResponseWriter.
 type grpcWebResponse struct {

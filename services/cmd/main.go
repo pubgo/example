@@ -1,13 +1,13 @@
 package main
 
 import (
+	"github.com/pubgo/example/services/entry/cli_entry"
+	"github.com/pubgo/example/services/entry/gid"
+	"github.com/pubgo/example/services/entry/gin_entry"
+	"github.com/pubgo/example/services/entry/grpc_entry"
+	"github.com/pubgo/example/services/entry/task_entry"
+	"github.com/pubgo/example/services/entry/version_entry"
 	"github.com/pubgo/lava"
-	"github.com/pubgo/lava/internal/example/services/entry/cli_entry"
-	"github.com/pubgo/lava/internal/example/services/entry/gid"
-	"github.com/pubgo/lava/internal/example/services/entry/gin_entry"
-	"github.com/pubgo/lava/internal/example/services/entry/grpc_entry"
-	"github.com/pubgo/lava/internal/example/services/entry/task_entry"
-	"github.com/pubgo/lava/internal/example/services/entry/version_entry"
 )
 
 func main() {
